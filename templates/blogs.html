@@ -1,23 +1,18 @@
 {% extends "base.html" %}
+
 {% block content %}
-        <h1>Build A Blog</h1>
-        <form method='post'>
-            <label>
-                New Post:
-                <input type='text' name='post'/>
-            </label>
-            <input type='submit' value='Add Post' />
-        </form>
 
-        <hr />
+    <h1 align='center'>Build a Blog</h1>
+    {% if posts|length == 0 %}
+    <p>No Blog Posts Yet</p>
+    {% else %}
+        <ul type='none'>
+            {% for post in posts %}
+                <li><h3><a """href='base.html'"">{{post.title}}</a></h3></li>
+                <li>{{post.body}}</li>
+                <br>
+            {% endfor %}
+        </ul>
+    {% endif %}    
 
-        {% if tasks|length == 0 %}
-        <p>No posts yet</p>
-        {% endif %}
-
-            <ul>
-                {% for post in posts %}
-                <li>{{post}}</li>
-                {% endfor %}
-            </ul>
 {% endblock %}        
