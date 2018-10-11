@@ -8,7 +8,7 @@
     {% else %}
         <ul type='none'>
             {% for post in posts %}
-                <li><h3><a """href='base.html'"">{{post.title}}</a></h3></li>
+                <li><h3><a href="/blogs?id={{post.id}}">{{post.title}}</a></h3></li>
                 <li>{{post.body}}</li>
                 <br>
             {% endfor %}

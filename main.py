@@ -12,37 +12,45 @@ class Blog(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(120))
-    body = db.Column(db.String(240))
-    #owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    body = db.Column(db.String(800))
 
     def __init__(self, title, body):
         self.title = title
         self.body = body
-        #self.owner = owner
+
+@app.route('/')
+def index():
+    return redirect('/blogs')
 
 @app.route('/newpost', methods=['POST', 'GET'])
 def newpost():
     if request.method == 'POST':
-        post_title_name = request.form['title']
-        post_body_name = request.form['body']
-        if post_title_name == "" or post_body_name == "":
+        new_post_title = request.form['title']
+        new_post_body = request.form['body']
+        new_post = Blog(new_post_title, new_post_body)
+
+        if new_post_title == "" or new_post_body == "":
             flash("You've left a mandatory field blank. Please fill in both fields to post your entry", 'error')
+            return render_template('newpost.html', title="Build A Blog", new_post_title=new_post_title, new_post_body=new_post_body)
         else:    
-            new_post = Blog(post_title_name, post_body_name)
 
             db.session.add(new_post)
             db.session.commit()
-            return redirect('/blogs')
+            url = '/blogs?id=' + str(new_post.id)
+            return redirect(url)
 
     return render_template('newpost.html',title="Build A Blog")
 
 
 @app.route('/blogs', methods=['POST', 'GET'])
 def blogs():
-
-    posts = Blog.query.all()
-
-    return render_template('blogs.html', title='Build A Blog', posts=posts)
+    ind_id = request.args.get('id')
+    if (ind_id):
+        post = Blog.query.get(ind_id)
+        return render_template('individual.html', title='Build A Blog', post=post)
+    else:
+        all_posts = Blog.query.all()
+        return render_template('blogs.html', title='Build A Blog', posts=all_posts)
 
 if __name__ == '__main__':            
     app.run()
