@@ -44,9 +44,9 @@ def newpost():
 
 @app.route('/blogs', methods=['POST', 'GET'])
 def blogs():
-    ind_id = request.args.get('id')
-    if (ind_id):
-        post = Blog.query.get(ind_id)
+    individual_id = request.args.get('id')
+    if (individual_id):
+        post = Blog.query.get(individual_id)
         return render_template('individual.html', title='Build A Blog', post=post)
     else:
         all_posts = Blog.query.all()
